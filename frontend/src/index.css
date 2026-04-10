@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito+Sans:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2A2A2A transparent;
+  }
+  body {
+    overflow-x: hidden;
+    font-family: 'Nunito Sans', sans-serif;
+    background: #0a0a0a;
+  }
+  ::selection {
+    background: rgba(139, 0, 0, 0.4);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-red hover:bg-brand-red-hover text-white font-semibold
+           px-6 py-3 rounded-lg transition-all duration-200
+           active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-brand-surface hover:bg-brand-surface-2 text-txt-primary font-medium
+           px-6 py-3 rounded-lg border border-brand-border transition-all duration-200
+           active:scale-[0.97];
+  }
+  .btn-gold {
+    @apply bg-brand-gold hover:bg-brand-gold-light text-brand-black font-semibold
+           px-6 py-3 rounded-lg transition-all duration-200
+           active:scale-[0.97];
+  }
+  .input-field {
+    @apply w-full bg-brand-surface border border-brand-border rounded-lg
+           px-4 py-3 text-txt-primary placeholder-txt-muted
+           focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red
+           transition-colors duration-200;
+  }
+  .auth-input {
+    @apply flex items-center gap-3 rounded-full border border-[#f2e5b8] bg-[#fffaf0] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)] sm:px-5 sm:py-3.5;
+  }
+  .auth-input input {
+    @apply w-full bg-transparent text-base text-gray-800 placeholder:text-[#bcae88] focus:outline-none sm:text-lg;
+  }
+  .auth-button {
+    @apply flex w-full items-center justify-center rounded-full bg-brand-plum px-6 py-3.5 font-display text-lg font-bold text-white shadow-[0_14px_28px_rgba(117,96,128,0.26)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#675372] disabled:cursor-not-allowed disabled:opacity-60 sm:text-xl;
+  }
+  .auth-ghost-button {
+    @apply inline-flex items-center justify-center rounded-full border border-[#e8d9b8] bg-[#fff7df] px-5 py-2.5 font-semibold text-brand-ink/75 transition hover:bg-[#fff2cd];
+  }
+  .auth-checkbox {
+    @apply h-5 w-5 rounded-full border border-[#d7c28b] bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:h-6 sm:w-6;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
