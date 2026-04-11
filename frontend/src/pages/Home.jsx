@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState, useRef, useEffect } from 'react';
+import { BOOKS } from './Books';
 
 function IconBook({ className = 'h-5 w-5' }) {
   return (
@@ -98,10 +99,10 @@ const statCards = [
 ];
 
 const readingNow = [
-  { title: 'The Echo of Dreams', author: 'Evelyn Rose', progress: 65, image: '/loginpage.png' },
-  { title: 'Whispers of Yesterday', author: 'Marcus Thorne', progress: 12, image: '/registerpage.png' },
-  { title: 'The Invisible Thread', author: 'Clara M. Woods', progress: 88, image: '/forgotpassword.png' },
-  { title: 'Silk & Cedar', author: 'Julian Vance', progress: 42, image: '/resetpassword.png' },
+  { title: 'Twisted Love', author: 'Ana Huang', progress: 65, image: '/books/twistedlove.png' },
+  { title: 'Twisted Hate', author: 'Ana Huang', progress: 12, image: '/books/twistedhate.png' },
+  { title: 'Twisted Games', author: 'Ana Huang', progress: 88, image: '/books/twistedgames.png' },
+  { title: 'Twisted Lies', author: 'Ana Huang', progress: 42, image: '/books/twistedlies.png' },
 ];
 
 const activity = [
@@ -116,6 +117,7 @@ export default function Home() {
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
   const profileRef = useRef();
+  const [search, setSearch] = useState("");
 
   function handleLogout() {
     logout();
@@ -136,6 +138,29 @@ export default function Home() {
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showProfile]);
+
+  // Filter currently reading books by search (for dashboard section)
+  const filteredReadingNow = readingNow.filter(
+    (book) =>
+      book.title.toLowerCase().includes(search.toLowerCase()) ||
+      book.author.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Global search: filter all books from BOOKS
+  const [showDropdown, setShowDropdown] = useState(false);
+  const filteredAllBooks = search.trim()
+    ? BOOKS.filter(
+        (book) =>
+          book.title.toLowerCase().includes(search.toLowerCase()) ||
+          book.author.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
+
+  function handleSearchSelect(book) {
+    setShowDropdown(false);
+    setSearch("");
+    navigate(`/books/${book.title.toLowerCase().replace(/\s+/g, '-')}`);
+  }
 
   return (
     <div className="min-h-screen bg-[#fcfaf7] text-[#4f3d42]">
@@ -192,9 +217,39 @@ export default function Home() {
 
         <main className="flex-1 px-5 py-5 sm:px-7 lg:px-8">
           <header className="flex items-center justify-between gap-4 border-b border-[#efe9e1] pb-4">
-            <div className="flex max-w-[455px] flex-1 items-center gap-3 rounded-full bg-[#f2efea] px-5 py-3 text-[#978b87] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+            <div className="flex max-w-[455px] flex-1 items-center gap-3 rounded-full bg-[#f2efea] px-5 py-3 text-[#978b87] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] relative">
               <IconSearch className="h-5 w-5" />
-              <span className="text-base">Search your sanctuary...</span>
+              <input
+                type="text"
+                value={search}
+                onChange={e => {
+                  setSearch(e.target.value);
+                  setShowDropdown(e.target.value.trim().length > 0);
+                }}
+                onFocus={() => setShowDropdown(search.trim().length > 0)}
+                onBlur={() => setTimeout(() => setShowDropdown(false), 120)}
+                placeholder="Search all books..."
+                className="bg-transparent outline-none flex-1 text-base text-[#978b87] placeholder-[#b8aeb2]"
+                autoComplete="off"
+              />
+              {showDropdown && filteredAllBooks.length > 0 && (
+                <div className="absolute left-0 top-12 z-20 w-full bg-white rounded-2xl shadow-lg border border-[#f3e6e6] max-h-72 overflow-y-auto animate-fade-in">
+                  {filteredAllBooks.map((book) => (
+                    <button
+                      key={book.title}
+                      type="button"
+                      className="flex items-center gap-3 w-full px-4 py-3 hover:bg-[#f7e8f3] text-left border-b border-[#f3e6e6] last:border-b-0"
+                      onMouseDown={() => handleSearchSelect(book)}
+                    >
+                      <img src={book.image} alt={book.title} className="w-10 h-14 object-cover rounded-lg border border-[#f3e6e6]" />
+                      <div>
+                        <div className="font-semibold text-[#6b5457]">{book.title}</div>
+                        <div className="text-xs text-[#8f7f7d]">{book.author}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-5 text-[#735d61] relative">
               <IconBell className="h-5 w-5" />
@@ -269,19 +324,23 @@ export default function Home() {
             <section>
               <div className="mb-5 flex items-center justify-between gap-4">
                 <h2 className="font-display text-[2rem] font-bold text-[#6b575d]">Currently Reading</h2>
-                <button type="button" className="text-base font-semibold text-[#6b575d] hover:underline">
+                <button
+                  type="button"
+                  className="text-base font-semibold text-[#6b575d] hover:underline"
+                  onClick={() => navigate('/books')}
+                >
                   View Library
                 </button>
               </div>
 
               <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
-                {readingNow.map((book, index) => (
+                {filteredReadingNow.map((book, index) => (
                   <article key={book.title}>
                     <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_18px_38px_rgba(228,219,212,0.6)]">
                       <img
                         src={book.image}
                         alt={book.title}
-                        className={`w-full object-cover ${index === 3 ? 'h-[385px] object-right' : 'h-[385px]'}`}
+                        className={`w-full object-cover h-[385px] ${index === 3 ? 'object-right' : ''}`}
                       />
                     </div>
                     <h3 className="mt-5 text-[1.65rem] font-extrabold leading-tight text-[#1f1d1e]">{book.title}</h3>
