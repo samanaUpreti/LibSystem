@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BOOKS = [
   {
@@ -114,15 +115,22 @@ const TAGS = [
 
 export default function Books() {
   const [selectedTag, setSelectedTag] = useState('All Books');
+  const navigate = useNavigate();
   const filteredBooks = selectedTag === 'All Books'
     ? BOOKS
     : BOOKS.filter(book => book.tags.includes(selectedTag));
 
   return (
     <div className="px-8 py-8 min-h-screen" style={{ background: '#f5d5e7' }}>
+      <button
+        onClick={() => navigate('/')}
+        className="mb-6 px-5 py-2 rounded-full bg-[#ede5fb] text-[#7b666b] font-semibold text-base hover:bg-[#d6c6f7] transition shadow"
+      >
+        ← Back to Dashboard
+      </button>
       <h1 className="text-3xl font-extrabold text-[#7b666b] mb-2">The Archives</h1>
       <p className="text-lg text-[#8f7f7d] mb-6">Wander through our curated collection of ethereal wisdom and whispered stories.</p>
-      <div className="flex gap-3 mb-8">
+      <div className="flex gap-3 mb-8 flex-wrap">
         {TAGS.map(tag => (
           <button
             key={tag}
@@ -145,12 +153,17 @@ export default function Books() {
             <div className="w-full flex flex-col items-center">
               <div className="font-bold text-lg text-[#6b5457] text-center">{book.title}</div>
               <div className="text-sm text-[#8f7f7d] mb-2 text-center">By {book.author}</div>
-              <div className="flex gap-2 mb-3">
+              <div className="flex gap-2 mb-3 flex-wrap justify-center">
                 {book.tags.map(tag => (
                   <span key={tag} className="px-3 py-1 rounded-full text-xs font-bold bg-[#f3f0f7] text-[#7b666b] border border-[#e5d8f7]">{tag}</span>
                 ))}
               </div>
-              <button className="w-full py-2 rounded-full bg-[#ede5fb] text-[#7b666b] font-semibold text-base hover:bg-[#d6c6f7] transition">Issue Book</button>
+              <button
+                className="w-full py-2 rounded-full bg-[#ede5fb] text-[#7b666b] font-semibold text-base hover:bg-[#d6c6f7] transition"
+                onClick={() => navigate('/issued-books')}
+              >
+                Issue Book
+              </button>
             </div>
           </div>
         ))}
@@ -158,3 +171,5 @@ export default function Books() {
     </div>
   );
 }
+
+export { BOOKS };
