@@ -84,11 +84,11 @@ function IconSearch({ className = 'h-5 w-5' }) {
 }
 
 const sidebarItems = [
-  { label: 'Dashboard', icon: IconGrid, active: true },
-  { label: 'Books', icon: IconBook },
-  { label: 'Issued Books', icon: IconBookmark },
-  { label: 'Return', icon: IconArrowLeft },
-  { label: 'Profile', icon: IconUser },
+  { label: 'Dashboard', icon: IconGrid, route: '/' },
+  { label: 'Books', icon: IconBook, route: '/books' },
+  { label: 'Issued Books', icon: IconBookmark, route: '/issued-books' },
+  { label: 'Return', icon: IconArrowLeft, route: '/return' },
+  { label: 'Profile', icon: IconUser, route: '/profile' },
 ];
 
 const statCards = [
@@ -158,8 +158,9 @@ export default function Home() {
                 <button
                   key={item.label}
                   type="button"
+                  onClick={() => item.route && navigate(item.route)}
                   className={`flex w-full items-center gap-4 rounded-full px-5 py-3.5 text-left text-[1.02rem] font-semibold transition ${
-                    item.active ? 'bg-white text-[#5f4c52] shadow-[0_10px_24px_rgba(226,218,211,0.7)]' : 'text-[#66575d] hover:bg-white/70'
+                    window.location.pathname === item.route ? 'bg-white text-[#5f4c52] shadow-[0_10px_24px_rgba(226,218,211,0.7)]' : 'text-[#66575d] hover:bg-white/70'
                   }`}
                 >
                   <Comp className="h-5 w-5 text-[#6c5b60]" />
