@@ -90,6 +90,7 @@ const sidebarItems = [
   { label: 'Issued Books', icon: IconBookmark, route: '/issued-books' },
   { label: 'Return', icon: IconArrowLeft, route: '/return' },
   { label: 'Profile', icon: IconUser, route: '/profile' },
+  { label: 'Settings', icon: IconSettings, route: '/settings' },
 ];
 
 const statCards = [

@@ -96,7 +96,7 @@ export default function IssuedBooks() {
           + Add New Book
         </button>
         <div className="mt-10 space-y-1 text-[1.02rem] text-[#66575d]">
-          <button className="flex w-full items-center gap-4 rounded-full px-4 py-3 hover:bg-white/70">Settings</button>
+          <button type="button" className="flex w-full items-center gap-4 rounded-full px-4 py-3 hover:bg-white/70" onClick={() => navigate('/settings')}>Settings</button>
           <button className="flex w-full items-center gap-4 rounded-full px-4 py-3 hover:bg-white/70">Logout</button>
         </div>
       </aside>
