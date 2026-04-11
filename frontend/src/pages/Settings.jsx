@@ -1,10 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-// Sidebar icons
-
-
-
+// IconBook and IconLogout copied from Home.jsx for sidebar and logout button
 function IconBook({ className = 'h-5 w-5' }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -12,41 +6,7 @@ function IconBook({ className = 'h-5 w-5' }) {
     </svg>
   );
 }
-function IconGrid({ className = 'h-5 w-5' }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path d="M4.5 4.5h6v6h-6v-6Zm9 0h6v6h-6v-6Zm-9 9h6v6h-6v-6Zm9 0h6v6h-6v-6Z" />
-    </svg>
-  );
-}
-function IconBookmark({ className = 'h-5 w-5' }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path d="M6.75 3.75A2.25 2.25 0 0 0 4.5 6v13.125a.375.375 0 0 0 .6.3L12 14.25l6.9 5.175a.375.375 0 0 0 .6-.3V6a2.25 2.25 0 0 0-2.25-2.25h-10.5Z" />
-    </svg>
-  );
-}
-function IconArrowLeft({ className = 'h-5 w-5' }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path d="M10.28 5.47a.75.75 0 0 1 0 1.06L5.81 11h12.44a.75.75 0 0 1 0 1.5H5.81l4.47 4.47a.75.75 0 1 1-1.06 1.06l-5.75-5.75a.75.75 0 0 1 0-1.06l5.75-5.75a.75.75 0 0 1 1.06 0Z" />
-    </svg>
-  );
-}
-function IconUser({ className = 'h-5 w-5' }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path d="M12 12a4.125 4.125 0 1 0 0-8.25 4.125 4.125 0 0 0 0 8.25Zm-7.5 7.125A6.375 6.375 0 0 1 10.875 12.75h2.25A6.375 6.375 0 0 1 19.5 19.125a.375.375 0 0 1-.375.375H4.875a.375.375 0 0 1-.375-.375Z" />
-    </svg>
-  );
-}
-function IconSettings({ className = 'h-5 w-5' }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-      <path fillRule="evenodd" d="M11.49 2.2a.75.75 0 0 1 1.02 0l1.01.928a2.25 2.25 0 0 0 2.17.473l1.338-.41a.75.75 0 0 1 .883.51l.405 1.322a2.25 2.25 0 0 0 1.54 1.54l1.322.405a.75.75 0 0 1 .51.883l-.41 1.338a2.25 2.25 0 0 0 .473 2.17l.928 1.01a.75.75 0 0 1 0 1.02l-.928 1.01a2.25 2.25 0 0 0-.473 2.17l.41 1.338a.75.75 0 0 1-.51.883l-1.322.405a2.25 2.25 0 0 0-1.54 1.54l-.405 1.322a.75.75 0 0 1-.883.51l-1.338-.41a2.25 2.25 0 0 0-2.17.473l-1.01.928a.75.75 0 0 1-1.02 0l-1.01-.928a2.25 2.25 0 0 0-2.17-.473l-1.338.41a.75.75 0 0 1-.883-.51l-.405-1.322a2.25 2.25 0 0 0-1.54-1.54l-1.322-.405a.75.75 0 0 1-.51-.883l.41-1.338a2.25 2.25 0 0 0-.473-2.17l-.928-1.01a.75.75 0 0 1 0-1.02l.928-1.01a2.25 2.25 0 0 0 .473-2.17l-.41-1.338a.75.75 0 0 1 .51-.883l1.322-.405a2.25 2.25 0 0 0 1.54-1.54l.405-1.322a.75.75 0 0 1 .883-.51l1.338.41a2.25 2.25 0 0 0 2.17-.473l1.01-.928ZM12 15.75A3.75 3.75 0 1 0 12 8.25a3.75 3.75 0 0 0 0 7.5Z" clipRule="evenodd" />
-    </svg>
-  );
-}
+
 function IconLogout({ className = 'h-5 w-5' }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -55,15 +15,10 @@ function IconLogout({ className = 'h-5 w-5' }) {
     </svg>
   );
 }
-
-const sidebarItems = [
-  { label: 'Dashboard', icon: IconGrid, route: '/' },
-  { label: 'Books', icon: IconBook, route: '/books' },
-  { label: 'Issued Books', icon: IconBookmark, route: '/issued-books' },
-  { label: 'Return', icon: IconArrowLeft, route: '/return' },
-  { label: 'Profile', icon: IconUser, route: '/profile' },
-  { label: 'Settings', icon: IconSettings, route: '/settings' },
-];
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { sidebarItems } from './Home.jsx';
 const THEMES = [
   { name: 'Rose & Lilac', desc: 'Active Theme', value: 'rose', color: 'bg-gradient-to-r from-[#f7e3ea] to-[#e7e3f7]' },
   { name: 'Morning Sage', desc: 'Classic Clean', value: 'sage', color: 'bg-[#eaf7f3]' },
@@ -72,6 +27,7 @@ const THEMES = [
 
 export default function Settings() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -139,14 +95,6 @@ export default function Settings() {
           <span>Add New Book</span>
         </button>
         <div className="mt-8 space-y-1 text-[1.01rem] text-[#66575d]">
-          <button
-            type="button"
-            className={`flex w-full items-center gap-3 rounded-full px-4 py-2 hover:bg-white/70 ${window.location.pathname === '/settings' ? 'text-[#5f4c52] font-bold' : ''}`}
-            onClick={() => { if (window.location.pathname !== '/settings') navigate('/settings'); }}
-          >
-            <IconSettings className="h-5 w-5" />
-            <span>Settings</span>
-          </button>
           <button type="button" className="flex w-full items-center gap-3 rounded-full px-4 py-2 hover:bg-white/70">
             <IconLogout className="h-5 w-5" />
             <span>Logout</span>

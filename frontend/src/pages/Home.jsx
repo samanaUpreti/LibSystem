@@ -84,7 +84,7 @@ function IconSearch({ className = 'h-5 w-5' }) {
   );
 }
 
-const sidebarItems = [
+export const sidebarItems = [
   { label: 'Dashboard', icon: IconGrid, route: '/' },
   { label: 'Books', icon: IconBook, route: '/books' },
   { label: 'Issued Books', icon: IconBookmark, route: '/issued-books' },
@@ -206,10 +206,6 @@ export default function Home() {
           </button>
 
           <div className="mt-10 space-y-1 text-[1.02rem] text-[#66575d]">
-            <button type="button" className="flex w-full items-center gap-4 rounded-full px-4 py-3 hover:bg-white/70">
-              <IconSettings className="h-5 w-5" />
-              <span>Settings</span>
-            </button>
             <button type="button" onClick={handleLogout} className="flex w-full items-center gap-4 rounded-full px-4 py-3 hover:bg-white/70">
               <IconLogout className="h-5 w-5" />
               <span>Logout</span>
