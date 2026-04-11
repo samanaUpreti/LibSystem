@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState, useRef, useEffect } from 'react';
+import NotificationPopup from '../components/NotificationPopup';
+import FavoritesOverlay from '../components/FavoritesOverlay';
 import { BOOKS } from './Books';
 
 function IconBook({ className = 'h-5 w-5' }) {
@@ -119,6 +121,8 @@ export default function Home() {
   const [showProfile, setShowProfile] = useState(false);
   const profileRef = useRef();
   const [search, setSearch] = useState("");
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
 
   function handleLogout() {
     logout();
@@ -250,8 +254,12 @@ export default function Home() {
               )}
             </div>
             <div className="flex items-center gap-5 text-[#735d61] relative">
-              <IconBell className="h-5 w-5" />
-              <IconHeart className="h-5 w-5" />
+              <button onClick={() => setShowNotifications(true)} aria-label="Show notifications">
+                <IconBell className="h-5 w-5" />
+              </button>
+              <button onClick={() => setShowFavorites(true)} aria-label="Show favorites overlay">
+                <IconHeart className="h-5 w-5" />
+              </button>
               <button
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-[linear-gradient(145deg,#f3d3d7,#efc2c8)] ring-2 ring-[#f7e8e3] focus:outline-none"
                 onClick={() => setShowProfile((v) => !v)}
@@ -280,6 +288,16 @@ export default function Home() {
             </div>
           </header>
 
+          <NotificationPopup
+            open={showNotifications}
+            onClose={() => setShowNotifications(false)}
+            onViewAll={() => navigate('/all-notifications')}
+          />
+          <FavoritesOverlay
+            open={showFavorites}
+            onClose={() => setShowFavorites(false)}
+            onViewAll={() => navigate('/entire-collection')}
+          />
           <section className="mt-8 space-y-8">
             <div className="rounded-[42px] bg-[linear-gradient(135deg,#f7eeee,#faf5ef)] px-8 py-10 shadow-[0_18px_42px_rgba(232,223,216,0.6)]">
               <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
