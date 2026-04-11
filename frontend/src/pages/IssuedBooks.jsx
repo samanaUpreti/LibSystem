@@ -13,7 +13,7 @@ const ISSUED_BOOKS = [
   {
     title: 'The Night Circus',
     author: 'Erin Morgenstern',
-    image: '/books/nightcircus.png',
+    image: '/books/night.png',
     dueDate: 'Oct 24, 2023',
     status: 'On Time',
   },
@@ -89,7 +89,12 @@ export default function IssuedBooks() {
             Profile
           </button>
         </nav>
-        <button className="mt-auto flex items-center justify-center gap-3 rounded-full bg-[#e3eafd] px-6 py-4 font-display text-[1.05rem] font-bold text-[#5d6b7b] shadow-[0_14px_30px_rgba(198,162,168,0.15)] mb-8">+ Add New Book</button>
+        <button
+          className="mt-auto flex items-center justify-center gap-3 rounded-full bg-[#e3eafd] px-6 py-4 font-display text-[1.05rem] font-bold text-[#5d6b7b] shadow-[0_14px_30px_rgba(198,162,168,0.15)] mb-8"
+          onClick={() => navigate('/add-book')}
+        >
+          + Add New Book
+        </button>
         <div className="mt-10 space-y-1 text-[1.02rem] text-[#66575d]">
           <button className="flex w-full items-center gap-4 rounded-full px-4 py-3 hover:bg-white/70">Settings</button>
           <button className="flex w-full items-center gap-4 rounded-full px-4 py-3 hover:bg-white/70">Logout</button>
@@ -110,7 +115,7 @@ export default function IssuedBooks() {
             <div className="mt-2 text-xs text-[#bba6b6]">Return soon to avoid fines</div>
           </div>
           <div className="rounded-3xl bg-white p-7 flex flex-col items-center shadow">
-            <img src="/bookshelf.png" alt="Library Rules" className="w-16 h-16 mb-2 rounded-xl object-cover" />
+            <img src="books/bookshelf.png" alt="Library Rules" className="w-16 h-16 mb-2 rounded-xl object-cover" />
             <div className="text-xs text-[#7b666b] text-center">Please handle all books with love. Keep them away from tea spills and direct sunlight.</div>
           </div>
         </div>

@@ -198,6 +198,7 @@ export default function Home() {
           <button
             type="button"
             className="mt-auto flex items-center justify-center gap-3 rounded-full bg-[linear-gradient(90deg,#9b7f87,#efc6c9)] px-6 py-4 font-display text-[1.05rem] font-bold text-white shadow-[0_14px_30px_rgba(198,162,168,0.35)]"
+            onClick={() => navigate('/add-book')}
           >
             <span className="text-2xl leading-none">+</span>
             <span>Add New Book</span>
