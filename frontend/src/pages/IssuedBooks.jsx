@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NotificationPopup from '../components/NotificationPopup';
+import FavoritesOverlay from '../components/FavoritesOverlay';
 
 function IconBook({ className = 'h-7 w-7' }) {
   return (
@@ -42,6 +44,8 @@ const ISSUED_BOOKS = [
 
 export default function IssuedBooks() {
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showFavorites, setShowFavorites] = useState(false);
   const currentlyReading = 4;
   const overdueNotices = 1;
 
@@ -101,7 +105,28 @@ export default function IssuedBooks() {
         </div>
       </aside>
       <main className="flex-1 px-5 py-8 sm:px-7 lg:px-12">
-        <h1 className="text-4xl font-extrabold text-[#7b666b] mb-2">Issued Books</h1>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-4xl font-extrabold text-[#7b666b]">Issued Books</h1>
+          <div className="flex gap-3">
+            <button
+              className="relative flex items-center justify-center w-12 h-12 rounded-full bg-[#f7e3ea] hover:bg-[#f3d3d7] transition shadow"
+              onClick={() => setShowNotifications(true)}
+              aria-label="Show notifications"
+            >
+              <svg width="26" height="26" fill="none" viewBox="0 0 24 24" className="text-[#e48a9c]"><path d="M12 22a2 2 0 0 0 2-2H10a2 2 0 0 0 2 2Zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A1 1 0 0 0 6 19h12a1 1 0 0 0 .71-1.71L18 16Z" fill="currentColor"/></svg>
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#e48a9c] text-white text-xs rounded-full flex items-center justify-center font-bold">4</span>
+            </button>
+            <button
+              className="flex items-center justify-center w-12 h-12 rounded-full bg-[#ede5fb] hover:bg-[#e3f0fa] transition shadow text-[#a48ae4] text-2xl font-bold"
+              onClick={() => setShowFavorites(true)}
+              aria-label="Show favorites overlay"
+            >
+              ♥
+            </button>
+          </div>
+        </div>
+        <NotificationPopup open={showNotifications} onClose={() => setShowNotifications(false)} />
+        <FavoritesOverlay open={showFavorites} onClose={() => setShowFavorites(false)} />
         <p className="text-lg text-[#8f7f7d] mb-8">Keep track of your current literary journeys. Remember to return them to the sanctuary for others to discover.</p>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="rounded-3xl bg-white p-7 flex flex-col items-center shadow">
