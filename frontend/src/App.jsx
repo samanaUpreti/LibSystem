@@ -5,6 +5,7 @@ import Register from './pages/Authentication/Register';
 import ForgotPassword from './pages/Authentication/ForgotPassword';
 import ResetPassword from './pages/Authentication/ResetPassword';
 import Home from './pages/Home';
+import Books from './pages/Books';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/books" element={<ProtectedRoute><Books /></ProtectedRoute>} />
       </Routes>
     </div>
   );
