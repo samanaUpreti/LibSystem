@@ -12,6 +12,7 @@ import Settings from './pages/Settings';
 import NotificationPopup from './components/NotificationPopup';
 import ReturnBooks from './pages/ReturnBooks';
 import Profile from './pages/Profile';
+import EditProfile from "./pages/EditProfile";
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/add-book" element={<ProtectedRoute><AddBook /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/NotificationPopup" element={<NotificationPopup />} />
       </Routes>
     </div>

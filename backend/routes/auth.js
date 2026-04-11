@@ -116,7 +116,7 @@ router.get('/me', async (req, res) => {
     }
 
     const [users] = await db.execute(
-      'SELECT id, email, username, role, avatar_url, created_at FROM users WHERE id = ?',
+      'SELECT id, email, username, role, avatar_url, bio, primary_mood, created_at FROM users WHERE id = ?',
       [req.user.id]
     );
 
@@ -127,6 +127,41 @@ router.get('/me', async (req, res) => {
     res.json({ success: true, data: users[0] });
   } catch (err) {
     console.error('Get me error:', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// UPDATE PROFILE (PUT /auth/me)
+router.put('/me', async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'Not authenticated' });
+    }
+    const { username, email, bio, primaryMood, avatar } = req.body;
+    // Only update provided fields
+    const updates = [];
+    const params = [];
+    if (username) { updates.push('username = ?'); params.push(username); }
+    if (email) { updates.push('email = ?'); params.push(email); }
+    if (bio !== undefined) { updates.push('bio = ?'); params.push(bio); }
+    if (primaryMood !== undefined) { updates.push('primary_mood = ?'); params.push(primaryMood); }
+    if (avatar !== undefined) { updates.push('avatar_url = ?'); params.push(avatar); }
+    if (updates.length === 0) {
+      return res.status(400).json({ success: false, message: 'No fields to update' });
+    }
+    params.push(req.user.id);
+    await db.execute(
+      `UPDATE users SET ${updates.join(', ')} WHERE id = ?`,
+      params
+    );
+    // Return updated user
+    const [users] = await db.execute(
+      'SELECT id, email, username, role, avatar_url, bio, primary_mood, created_at FROM users WHERE id = ?',
+      [req.user.id]
+    );
+    res.json({ success: true, data: users[0] });
+  } catch (err) {
+    console.error('Update profile error:', err);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
