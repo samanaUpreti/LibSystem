@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Books from './pages/Books';
 import IssuedBooks from './pages/IssuedBooks';
 import AddBook from './pages/AddBook';
+import Settings from './pages/Settings';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -34,6 +35,7 @@ export default function App() {
         {/* <Route path="/books/:title" element={<ProtectedRoute><ReadBook /></ProtectedRoute>} /> */}
         <Route path="/issued-books" element={<ProtectedRoute><IssuedBooks /></ProtectedRoute>} />
         <Route path="/add-book" element={<ProtectedRoute><AddBook /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       </Routes>
     </div>
   );
