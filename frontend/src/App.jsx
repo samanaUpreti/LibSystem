@@ -10,6 +10,7 @@ import IssuedBooks from './pages/IssuedBooks';
 import AddBook from './pages/AddBook';
 import Settings from './pages/Settings';
 import NotificationPopup from './components/NotificationPopup';
+import ReturnBooks from './pages/ReturnBooks';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -33,7 +34,7 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/books" element={<ProtectedRoute><Books /></ProtectedRoute>} />
-        {/* <Route path="/books/:title" element={<ProtectedRoute><ReadBook /></ProtectedRoute>} /> */}
+        <Route path="/return" element={<ReturnBooks />} />
         <Route path="/issued-books" element={<ProtectedRoute><IssuedBooks /></ProtectedRoute>} />
         <Route path="/add-book" element={<ProtectedRoute><AddBook /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
