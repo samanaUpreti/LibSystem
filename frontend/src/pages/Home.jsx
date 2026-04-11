@@ -1,3 +1,12 @@
+function IconHamburger({ className = 'h-7 w-7' }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <rect x="4" y="6" width="16" height="2" rx="1" />
+      <rect x="4" y="11" width="16" height="2" rx="1" />
+      <rect x="4" y="16" width="16" height="2" rx="1" />
+    </svg>
+  );
+}
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useState, useRef, useEffect } from 'react';
@@ -116,6 +125,7 @@ const activity = [
 
 
 export default function Home() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
@@ -169,7 +179,74 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#fcfaf7] text-[#4f3d42]">
+      {/* Hamburger for mobile */}
+      <button
+        className="lg:hidden fixed top-4 left-4 z-[100] bg-white rounded-full p-2 shadow"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Open sidebar"
+      >
+        <IconHamburger />
+      </button>
+
+      {/* Sidebar drawer for mobile (outside main flex) */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-[200] flex lg:hidden">
+          <div className="w-[258px] bg-[#f9f8f5] px-4 py-5 shadow-2xl flex flex-col animate-slide-in-left">
+            <div className="flex items-center gap-3 px-2 mb-10">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[linear-gradient(145deg,#f7d8db,#d2adb3)] text-[#7b666b] shadow-sm">
+                <IconBook className="h-7 w-7" />
+              </div>
+              <div>
+                <p className="font-display text-[1.15rem] font-extrabold text-[#715d61]">The Sanctuary</p>
+                <p className="text-sm text-[#8f7f7d]">Reading Nook</p>
+              </div>
+            </div>
+            <nav className="space-y-2 mb-10">
+              {sidebarItems.map((item) => {
+                const Comp = item.icon;
+                return (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => {
+                      setSidebarOpen(false);
+                      item.route && navigate(item.route);
+                    }}
+                    className={`flex w-full items-center gap-4 rounded-full px-5 py-3.5 text-left text-[1.02rem] font-semibold transition ${
+                      window.location.pathname === item.route ? 'bg-white text-[#5f4c52] shadow-[0_10px_24px_rgba(226,218,211,0.7)]' : 'text-[#66575d] hover:bg-white/70'
+                    }`}
+                  >
+                    <Comp className="h-5 w-5 text-[#6c5b60]" />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+            <button
+              type="button"
+              className="mt-auto flex items-center justify-center gap-3 rounded-full bg-[linear-gradient(90deg,#9b7f87,#efc6c9)] px-6 py-4 font-display text-[1.05rem] font-bold text-white shadow-[0_14px_30px_rgba(198,162,168,0.35)]"
+              onClick={() => {
+                setSidebarOpen(false);
+                navigate('/add-book');
+              }}
+            >
+              <span className="text-2xl leading-none">+</span>
+              <span>Add New Book</span>
+            </button>
+            <div className="mt-10 space-y-1 text-[1.02rem] text-[#66575d]">
+              <button type="button" onClick={() => { setSidebarOpen(false); handleLogout(); }} className="flex w-full items-center gap-4 rounded-full px-4 py-3 hover:bg-white/70">
+                <IconLogout className="h-5 w-5" />
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+          {/* Overlay to close */}
+          <div className="flex-1 bg-black/30" onClick={() => setSidebarOpen(false)} />
+        </div>
+      )}
+
       <div className="mx-auto flex min-h-screen max-w-[1400px]">
+        {/* Sidebar for desktop */}
         <aside className="hidden w-[258px] shrink-0 flex-col bg-[#f9f8f5] px-4 py-5 shadow-[18px_0_45px_rgba(240,234,228,0.8)] lg:flex">
           <div className="flex items-center gap-3 px-2">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[linear-gradient(145deg,#f7d8db,#d2adb3)] text-[#7b666b] shadow-sm">

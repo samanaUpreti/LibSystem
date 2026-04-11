@@ -3,31 +3,31 @@ import ReactDOM from 'react-dom';
 
 const recentlyFavorited = [
   {
-    cover: '/books/shadows-of-bloom.png',
-    title: 'Shadows of Bloom',
-    author: 'Evelyn Thorne',
+    cover: '/books/shatter.png',
+    title: 'Shatter Me',
+    author: 'Tahereh Mafi',
   },
   {
-    cover: '/books/the-quiet-forest.png',
-    title: 'The Quiet Forest',
-    author: 'S. J. Marrow',
+    cover: '/books/six.png',
+    title: 'Six of Crows',
+    author: 'Leigh Bardugo',
   },
 ];
 
 const dreamyCurations = [
   {
-    cover: '/books/the-sun-seeker.png',
-    title: 'The Sun Seeker',
-    tag: 'WHIMSICAL',
+    cover: '/books/onceupon.png',
+    title: 'Once Upon a Broken Heart',
+    tag: 'FAIRY TALE',
     tagColor: 'bg-[#f7e3ea] text-[#e48a9c]',
-    author: 'Leo Vane',
+    author: 'Stephanie Garber',
   },
   {
-    cover: '/books/ancient-echoes.png',
-    title: 'Ancient Echoes',
-    tag: 'MYSTIC',
+    cover: '/books/court.png',
+    title: 'A Court of Thorns and Roses',
+    tag: 'FANTASY',
     tagColor: 'bg-[#ede5fb] text-[#a48ae4]',
-    author: 'Clara Wells',
+    author: 'Sarah J. Maas',
   },
 ];
 
