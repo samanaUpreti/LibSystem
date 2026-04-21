@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CUSTOM_BOOKS_STORAGE_KEY } from './Books';
 
 const CATEGORIES = [
   'Classic Literature',
@@ -19,6 +20,8 @@ export default function AddBook() {
   const [description, setDescription] = useState('');
   const [cover, setCover] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
   const navigate = useNavigate();
 
   function handleCoverChange(e) {
@@ -46,8 +49,52 @@ export default function AddBook() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // Here you would send the new book data to your backend or state
-    // For now, just go back to books page
+
+    const trimmedTitle = title.trim();
+    const trimmedAuthor = author.trim();
+    const trimmedDescription = description.trim();
+
+    if (!trimmedTitle || !trimmedAuthor || !trimmedDescription) {
+      setErrorMessage('Please fill in the title, author, and description before saving.');
+      return;
+    }
+
+    setIsSaving(true);
+    setErrorMessage('');
+
+    const newBook = {
+      title: trimmedTitle,
+      author: trimmedAuthor,
+      image: coverPreview || '/books/bookshelf.png',
+      tags: [category, 'Custom'],
+      description: trimmedDescription,
+    };
+
+    try {
+      const existingBooks = JSON.parse(localStorage.getItem(CUSTOM_BOOKS_STORAGE_KEY) || '[]');
+      const safeExistingBooks = Array.isArray(existingBooks) ? existingBooks : [];
+
+      const isDuplicate = safeExistingBooks.some(
+        (book) => book.title?.toLowerCase() === trimmedTitle.toLowerCase()
+          && book.author?.toLowerCase() === trimmedAuthor.toLowerCase()
+      );
+
+      if (isDuplicate) {
+        setErrorMessage('That book is already in your custom library.');
+        setIsSaving(false);
+        return;
+      }
+
+      localStorage.setItem(
+        CUSTOM_BOOKS_STORAGE_KEY,
+        JSON.stringify([newBook, ...safeExistingBooks])
+      );
+    } catch (_error) {
+      setErrorMessage('The book could not be saved right now. Please try again.');
+      setIsSaving(false);
+      return;
+    }
+
     navigate('/books');
   }
 
@@ -101,7 +148,18 @@ export default function AddBook() {
               <label className="block text-[#bba6b6] text-xs font-bold mb-2">DESCRIPTION</label>
               <textarea className="w-full rounded-2xl bg-[#f2efea] px-5 py-3 text-base text-[#978b87] placeholder-[#b8aeb2] outline-none min-h-[100px]" placeholder="Tell the story of this book's essence..." value={description} onChange={e => setDescription(e.target.value)} required />
             </div>
-            <button type="submit" className="mt-4 px-8 py-3 rounded-full bg-[#7b666b] text-white font-bold text-lg shadow hover:bg-[#5f4c52] transition self-end">Save Book</button>
+            {errorMessage && (
+              <div className="rounded-2xl bg-[#fff0f0] px-4 py-3 text-sm font-semibold text-[#b85c6b]">
+                {errorMessage}
+              </div>
+            )}
+            <button
+              type="submit"
+              className="mt-4 px-8 py-3 rounded-full bg-[#7b666b] text-white font-bold text-lg shadow hover:bg-[#5f4c52] transition self-end disabled:cursor-not-allowed disabled:opacity-70"
+              disabled={isSaving}
+            >
+              {isSaving ? 'Saving...' : 'Save Book'}
+            </button>
           </form>
           <div className="flex flex-col gap-8 w-full max-w-xs">
             <div className="bg-white rounded-3xl shadow p-8 flex flex-col items-center gap-4">

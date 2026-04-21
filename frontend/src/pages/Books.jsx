@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const BOOKS = [
@@ -100,6 +100,8 @@ const BOOKS = [
   },
 ];
 
+const CUSTOM_BOOKS_STORAGE_KEY = 'nn_custom_books';
+
 const TAGS = [
   'All Books',
   'Mythology',
@@ -115,10 +117,25 @@ const TAGS = [
 
 export default function Books() {
   const [selectedTag, setSelectedTag] = useState('All Books');
+  const [books, setBooks] = useState(BOOKS);
   const navigate = useNavigate();
-  const filteredBooks = selectedTag === 'All Books'
-    ? BOOKS
-    : BOOKS.filter(book => book.tags.includes(selectedTag));
+
+  useEffect(() => {
+    try {
+      const savedBooks = JSON.parse(localStorage.getItem(CUSTOM_BOOKS_STORAGE_KEY) || '[]');
+      if (Array.isArray(savedBooks) && savedBooks.length > 0) {
+        setBooks([...savedBooks, ...BOOKS]);
+      }
+    } catch (_error) {
+      setBooks(BOOKS);
+    }
+  }, []);
+
+  const filteredBooks = useMemo(() => (
+    selectedTag === 'All Books'
+      ? books
+      : books.filter((book) => book.tags.includes(selectedTag))
+  ), [books, selectedTag]);
 
   return (
     <div className="px-8 py-8 min-h-screen" style={{ background: '#f5d5e7' }}>
@@ -172,4 +189,4 @@ export default function Books() {
   );
 }
 
-export { BOOKS };
+export { BOOKS, CUSTOM_BOOKS_STORAGE_KEY };
