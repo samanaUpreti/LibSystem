@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NotificationPopup from '../components/NotificationPopup';
 import FavoritesOverlay from '../components/FavoritesOverlay';
@@ -46,8 +46,28 @@ export default function IssuedBooks() {
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showFavorites, setShowFavorites] = useState(false);
-  const currentlyReading = 4;
-  const overdueNotices = 1;
+  const [issuedBooks, setIssuedBooks] = useState(ISSUED_BOOKS);
+  const [returnMessage, setReturnMessage] = useState('');
+  const returnMessageTimeoutRef = useRef(null);
+
+  const currentlyReading = issuedBooks.length;
+  const overdueNotices = useMemo(
+    () => issuedBooks.filter((book) => book.status === 'Overdue').length,
+    [issuedBooks]
+  );
+
+  function handleReturnBook(title) {
+    const returnedBook = issuedBooks.find((book) => book.title === title);
+    if (!returnedBook) return;
+
+    setIssuedBooks((currentBooks) => currentBooks.filter((book) => book.title !== title));
+    setReturnMessage(`"${title}" was returned successfully.`);
+
+    window.clearTimeout(returnMessageTimeoutRef.current);
+    returnMessageTimeoutRef.current = window.setTimeout(() => {
+      setReturnMessage('');
+    }, 2500);
+  }
 
   return (
     <div className="flex min-h-screen bg-[#fcfaf7]">
@@ -128,6 +148,11 @@ export default function IssuedBooks() {
         <NotificationPopup open={showNotifications} onClose={() => setShowNotifications(false)} />
         <FavoritesOverlay open={showFavorites} onClose={() => setShowFavorites(false)} />
         <p className="text-lg text-[#8f7f7d] mb-8">Keep track of your current literary journeys. Remember to return them to the sanctuary for others to discover.</p>
+        {returnMessage && (
+          <div className="mb-6 rounded-2xl bg-[#eef7eb] px-5 py-4 text-sm font-semibold text-[#51724d] shadow">
+            {returnMessage}
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="rounded-3xl bg-white p-7 flex flex-col items-center shadow">
             <div className="text-3xl font-extrabold text-[#7b666b] mb-2">{currentlyReading.toString().padStart(2, '0')}</div>
@@ -157,7 +182,7 @@ export default function IssuedBooks() {
                 </tr>
               </thead>
               <tbody>
-                {ISSUED_BOOKS.map((book, idx) => (
+                {issuedBooks.map((book) => (
                   <tr key={book.title} className="border-t border-[#f3f0f7]">
                     <td className="py-4 flex items-center gap-4">
                       <img src={book.image} alt={book.title} className="w-12 h-16 object-cover rounded-lg border border-[#f3f0f7]" />
@@ -170,13 +195,23 @@ export default function IssuedBooks() {
                       {book.status === 'Overdue' && <span className="px-4 py-1 rounded-full bg-[#ffeaea] text-[#d46a6a] text-xs font-bold">Overdue</span>}
                     </td>
                     <td className="py-4">
-                      <button className="px-5 py-2 rounded-full bg-[#eaf2fa] text-[#5d6b7b] font-semibold text-base hover:bg-[#d6e6f7] transition">Return Book</button>
+                      <button
+                        className="px-5 py-2 rounded-full bg-[#eaf2fa] text-[#5d6b7b] font-semibold text-base hover:bg-[#d6e6f7] transition"
+                        onClick={() => handleReturnBook(book.title)}
+                      >
+                        Return Book
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          {issuedBooks.length === 0 && (
+            <div className="pt-6 text-center text-[#8f7f7d]">
+              All issued books have been returned.
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           <div className="rounded-3xl bg-[#eaf2fa] p-7 flex flex-col items-center shadow">
